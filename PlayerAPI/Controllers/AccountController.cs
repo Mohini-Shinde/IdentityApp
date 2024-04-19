@@ -66,7 +66,7 @@ namespace PlayerAPI.Controllers
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            return Ok("Your account has been created. You can login");
+            return Ok(new JsonResult(new {title="Account Created", message="Your account has been created. You can login"}));
 
         }
         
