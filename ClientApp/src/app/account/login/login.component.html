@@ -6,17 +6,17 @@
                     <h3 class="mb-3 font-weight-normal">Login</h3>
                 </div>
                 <div class="form-floating mb-3">
-                    <input formControlName="userName" type="text" placeholder="Username" class="form-control"
-                    [class.is-invalid]="submitted && loginForm.get('userName')?.errors" >
-                    <label for="UserName">Username</label>
+                    <input formControlName="userName" id="userName" type="text" placeholder="Username" class="form-control"
+                        [class.is-invalid]="submitted && loginForm.get('userName')?.errors">
+                    <label for="userName">Username</label>
                     <span class="text-danger" *ngIf="submitted && loginForm.get('userName')?.hasError('required')">
                         Username is required
                     </span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input formControlName="password" type="password" placeholder="Password"  class="form-control"
-                    [class.is-invalid]="submitted && loginForm.get('password')?.errors">
-                    <label for="Password">Password</label>
+                    <input formControlName="password" id="password" type="password" placeholder="Password" class="form-control"
+                        [class.is-invalid]="submitted && loginForm.get('password')?.errors">
+                    <label for="password">Password</label>
                     <span class="text-danger" *ngIf="submitted && loginForm.get('password')?.hasError('required')">
                         Password is required
                     </span>
