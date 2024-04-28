@@ -1,11 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Register } from '../shared/models/Register';
+import { Register } from '../shared/models/account/register';
 import { environment } from 'src/environments/environment.development';
-import { Login } from '../shared/models/Login';
-import { User } from '../shared/models/User';
+import { Login } from '../shared/models/account/login';
+import { User } from '../shared/models/account/user';
 import { ReplaySubject, map, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { ConfirmEmail } from '../shared/models/account/confirmEmail';
+import { ResetPassword } from '../shared/models/account/resetPassword';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,7 @@ import { Router } from '@angular/router';
 export class AccountService {
   private userSource = new ReplaySubject<User | null>(1);
   user$ = this.userSource.asObservable();
-  constructor(private http: HttpClient, private router:Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
   refreshUser(jwt: string | null) {
     if (jwt === null) {
       this.userSource.next(null);
@@ -22,9 +24,9 @@ export class AccountService {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', 'Bearer ' + jwt);
 
-    return this.http.get<User>(`${environment.appUrl} /api/account/refresh-user-token`, {headers}).pipe(
+    return this.http.get<User>(`${environment.appUrl} /api/account/refresh-user-token`, { headers }).pipe(
       map((user: User) => {
-        if(user){
+        if (user) {
           this.setUser(user);
         }
       })
@@ -39,7 +41,7 @@ export class AccountService {
       })
     );
   }
-  logout(){
+  logout() {
     localStorage.removeItem(environment.userKey);
     this.userSource.next(null);
     this.router.navigateByUrl('/');
@@ -47,7 +49,18 @@ export class AccountService {
   register(model: Register) {
     return this.http.post(`${environment.appUrl}/api/account/register`, model)
   }
-
+  confirmEmail(model: ConfirmEmail) {
+    return this.http.put(`${environment.appUrl}/api/account/confirm-email`, model)
+  }
+  resendEmailConfirmationLink(email: string) {
+    return this.http.post(`${environment.appUrl}/api/account/resend-email-confirmation-link/${email}`, {})
+  }
+  forgotUsernameorPassword(email:string){
+    return this.http.post(`${environment.appUrl}/api/account/forgot-username-or-password/${email}`, {})
+  }
+  resetPassword(model: ResetPassword){
+    return this.http.put(`${environment.appUrl}/api/account/reset-password`, model)
+  }
   getJWT() {
     const key = localStorage.getItem(environment.userKey);
     if (key) {

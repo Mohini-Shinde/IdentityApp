@@ -41,11 +41,12 @@ namespace PlayerAPI.Services
         {
             try
             {
-                var client = new SmtpClient("smtp-mail.outlook.com", 587)
-                {
+                var client = new SmtpClient("smtp-mail.outlook.com")
+                {   Port=587,//25,
+                    DeliveryMethod=SmtpDeliveryMethod.Network,
                     EnableSsl = true,
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(_config["SMTP:Username"], _config["SMTP:Password"],"outlook.com")
+                    Credentials = new NetworkCredential(_config["SMTP:Username"], _config["SMTP:Password"])
                 };
                 var message = new MailMessage(from: _config["SMTP:Username"],
                     to: emailSend.To, subject: emailSend.Subject, body: emailSend.Body
